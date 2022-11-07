@@ -34,7 +34,8 @@ public class PanelIniciarEleicao extends JPanel {
 		btnIniciarVotacao = new JButton("Iniciar Votação", iconVotacao);
 		btnIniciarVotacao.setEnabled(Util.hasChapas());
 		estilizarButton(btnIniciarVotacao);
-		//TODO ActionListener
+		btnIniciarVotacao
+			.addActionListener((ActionEvent e) -> main.setPanel(new PanelVotacao(main)));
 		add(btnIniciarVotacao);
 	}
 

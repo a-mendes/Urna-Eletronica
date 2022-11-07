@@ -22,8 +22,8 @@ public class Main extends JFrame {
 	
 	private static final long serialVersionUID = 1L;
 	
-	public final static int WIDTH = 1280;
-	public final static int HEIGHT = 720;
+	public final static int WIDTH = 1200;
+	public final static int HEIGHT = 700;
 	
 	private JPanel currentPanel;
 	
