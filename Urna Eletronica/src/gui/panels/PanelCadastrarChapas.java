@@ -125,7 +125,17 @@ public class PanelCadastrarChapas extends JPanel {
 			return;
 		}
 		
-		Chapa chapa = new Chapa(numeroEleitoral, nomePresidente, nomeVice);
+		Chapa chapa = null;
+		
+		//TODO refact
+		if(numeroEleitoral == 11)
+			chapa = new Chapa(numeroEleitoral, nomePresidente, "res/candidatos/jordan.jpg", 
+												nomeVice, "res/candidatos/nicolas.jpg");
+		
+		else if(numeroEleitoral == 69)
+			chapa = new Chapa(numeroEleitoral, nomePresidente, "res/candidatos/pedro.jpg", 
+												nomeVice, "res/candidatos/manoa.jpg");
+		
 		Util.armazenarChapa(chapa);
 		
 		chapas = Util.lerChapas();

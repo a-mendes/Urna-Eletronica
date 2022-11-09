@@ -51,8 +51,15 @@ public class Util {
         	String nomePresidente = bufferedReader.readLine();
         	String nomeVice = bufferedReader.readLine();
         	
-        	Chapa chapa = new Chapa(numeroEleitoral, nomePresidente, nomeVice);
-        	
+        	//TODO refact
+        	Chapa chapa = null;
+        	if(numeroEleitoral == 11)
+    			chapa = new Chapa(numeroEleitoral, nomePresidente, "res/candidatos/jordan.jpg", 
+    												nomeVice, "res/candidatos/nicolas.jpg");
+    		
+    		else if(numeroEleitoral == 69)
+    			chapa = new Chapa(numeroEleitoral, nomePresidente, "res/candidatos/pedro.jpg", 
+    												nomeVice, "res/candidatos/manoa.jpg");        	
         	chapas.put(chapa.getNumeroEleitoral(), chapa);
         }
         
