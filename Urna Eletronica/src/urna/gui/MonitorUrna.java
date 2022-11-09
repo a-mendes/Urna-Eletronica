@@ -7,6 +7,7 @@ import static urna.gui.BotoesUrna.CORRIGE;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.util.HashMap;
 
 import javax.swing.BorderFactory;
@@ -27,10 +28,9 @@ public class MonitorUrna extends JPanel {
 	
 	public MonitorUrna(HashMap<Integer, Chapa> chapas) {
 		this.chapas = chapas;
-		setPreferredSize(new Dimension(575, 325));
+		setLayout(null);
 		setOpaque(false);
 		monitorVotando();
-		
 	}
 	
 	public void atualizarMonitor(BotoesUrna btnUrna) {
@@ -63,21 +63,25 @@ public class MonitorUrna extends JPanel {
 	}
 	
 	private void monitorVotando() {
-		//TODO DRY
-		lblCargo = new JLabel("Presidente\n", SwingConstants.CENTER);
-		lblCargo.setSize(new Dimension(500, 100));
+		
+		//TODO dry
+		Font font = Font.getFont("ARIAL");
 		if(getFont() != null)
-			lblCargo.setFont(getFont().deriveFont((float) 20));
+			font = getFont();
+		
+		lblCargo = initLblCargo();
 		add(lblCargo);
 		
 		lblNumero1 = new JLabel("", SwingConstants.CENTER);
-		lblNumero1.setPreferredSize(new Dimension(100, 100));
 		lblNumero1.setBorder(BorderFactory.createLineBorder(Color.black));
+		lblNumero1.setBounds(203, 60, 80, 80);
+		lblNumero1.setFont(font.deriveFont((float) 26));
 		add(lblNumero1);
 		
 		lblNumero2 = new JLabel("", SwingConstants.CENTER);
-		lblNumero2.setPreferredSize(new Dimension(100, 100));
 		lblNumero2.setBorder(BorderFactory.createLineBorder(Color.black));
+		lblNumero2.setBounds(293, 60, 80, 80);
+		lblNumero2.setFont(font.deriveFont((float) 26));
 		add(lblNumero2);
 		
 		lblChapa = new JLabel();
@@ -87,17 +91,17 @@ public class MonitorUrna extends JPanel {
 	private void monitorBranco() {
 		removeAll();
 		
-		//TODO DRY
-		lblCargo = new JLabel("Presidente\n", SwingConstants.CENTER);
-		lblCargo.setMinimumSize(new Dimension(500, 100));
+		//TODO dry
+		Font font = Font.getFont("ARIAL");
 		if(getFont() != null)
-			lblCargo.setFont(getFont().deriveFont((float) 20));
+			font = getFont();
+		
+		lblCargo = initLblCargo();
 		add(lblCargo);
 		
 		JLabel lblBranco = new JLabel("VOTO EM BRANCO", SwingConstants.CENTER);
-		lblBranco.setSize(new Dimension(500, 300));
-		if(getFont() != null)
-			lblBranco.setFont(getFont().deriveFont((float) 30));
+		lblBranco.setBounds(0, 60, 575, 100);
+		lblBranco.setFont(font.deriveFont((float) 30));
 		add(lblBranco);
 	}
 	
@@ -113,8 +117,16 @@ public class MonitorUrna extends JPanel {
 	private void showCandidato(int numeroEleitoral) {
 		Chapa chapa = chapas.get(numeroEleitoral);
 		
+		//TODO dry
+		Font font = Font.getFont("ARIAL");
+		if(getFont() != null)
+			font = getFont();
+		
 		if(chapa == null) {
-			//TODO voto nulo
+			JLabel lblNulo = new JLabel("VOTO NULO", SwingConstants.CENTER);
+			lblNulo.setBounds(0, 115, 575, 100);
+			lblNulo.setFont(font.deriveFont((float) 30));
+			add(lblNulo);
 			return;
 		}
 		
@@ -126,5 +138,19 @@ public class MonitorUrna extends JPanel {
 
 		lblChapa.setText(infoChapa);
 		lblChapa.setPreferredSize(new Dimension(400, 150));
+	}
+	
+	private JLabel initLblCargo() {
+		//TODO dry
+		Font font = Font.getFont("ARIAL");
+		if(getFont() != null)
+			font = getFont();
+		
+		lblCargo = new JLabel("Presidente", SwingConstants.CENTER);
+		lblCargo.setSize(new Dimension(575, 50));
+		lblCargo.setFont(font.deriveFont((float) 20));
+		add(lblCargo);
+		
+		return lblCargo;
 	}
 }
