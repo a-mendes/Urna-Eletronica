@@ -27,8 +27,8 @@ public class MonitorUrna extends JPanel {
 	
 	public MonitorUrna(HashMap<Integer, Chapa> chapas) {
 		this.chapas = chapas;
-		setPreferredSize(new Dimension(600, 400));
-		setMinimumSize(new Dimension(600, 400));
+		setPreferredSize(new Dimension(575, 325));
+		setOpaque(false);
 		monitorVotando();
 		
 	}
