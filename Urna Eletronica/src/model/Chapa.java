@@ -47,6 +47,10 @@ public class Chapa {
 		return qtdVotos;
 	}
 	
+	public void setQtdVotos(int votos) {
+		this.qtdVotos = votos;
+	}
+	
 	public void adicionarVoto() {
 		this.qtdVotos++;
 	}

@@ -1,15 +1,12 @@
 package main;
 
-import static util.Util.hasEleicaoEmAndamento;
-
 import java.awt.Dimension;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import gui.panels.PanelContinuarEleicao;
-import gui.panels.PanelIniciarEleicao;
+import gui.panels.PanelVotacao;
 
 /**
  * TODO
@@ -33,10 +30,7 @@ public class Main extends JFrame {
 		ImageIcon icon = new ImageIcon("res/icones/urna.png");
 		setIconImage(icon.getImage());
 		
-		if(hasEleicaoEmAndamento())
-			setPanel(new PanelContinuarEleicao(this));
-		else
-			setPanel(new PanelIniciarEleicao(this));
+		setPanel(new PanelVotacao(this));
 		
 		add(currentPanel);
 		

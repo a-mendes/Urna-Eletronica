@@ -9,8 +9,9 @@ import static urna.gui.BotoesUrna.CORRIGE;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Image;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -29,6 +30,8 @@ public class MonitorUrna extends JPanel {
 	private JLabel lblNumero1, lblNumero2;
 	private JLabel lblChapa;
 	
+	public int numeroEleitoral;
+	
 	public MonitorUrna(HashMap<Integer, Chapa> chapas) {
 		this.chapas = chapas;
 		setLayout(null);
@@ -44,11 +47,12 @@ public class MonitorUrna extends JPanel {
 			monitorCorrige();
 		
 		else if(btnUrna == CONFIRMA) {
-			if(lblNumero1.getText().isEmpty() || lblNumero2.getText().isEmpty())
+			if((lblNumero1.getText().isEmpty() || lblNumero2.getText().isEmpty()) && numeroEleitoral < -1)
 				showMessageDialog(null, "Preencha corretamente os números ou vote em BRANCO antes de CONFIRMAR");
 			
-			else 
+			else {
 				monitorConfirma();
+			}
 		}
 		
 		else if(lblNumero1.getText().isEmpty()) 
@@ -57,15 +61,16 @@ public class MonitorUrna extends JPanel {
 		else if(lblNumero2.getText().isEmpty()) {
 			lblNumero2.setText(btnUrna.getCodigo());
 			
-			int numeroEleitoral = Integer.parseInt(lblNumero1.getText() + lblNumero2.getText()); 
+			numeroEleitoral = Integer.parseInt(lblNumero1.getText() + lblNumero2.getText()); 
 			showCandidato(numeroEleitoral);
 		}
 		
 		validate();
-		repaint();
+		repaint();		
 	}
 	
 	private void monitorVotando() {
+		removeAll();
 		
 		//TODO dry
 		Font font = Font.getFont("ARIAL");
@@ -75,7 +80,6 @@ public class MonitorUrna extends JPanel {
 		lblCargo = initLblCargo();
 		add(lblCargo);
 		
-		//TODO talvez diminuir
 		lblNumero1 = new JLabel("", SwingConstants.CENTER);
 		lblNumero1.setBorder(BorderFactory.createLineBorder(Color.black));
 		lblNumero1.setBounds(100, 60, 50, 50);
@@ -93,6 +97,8 @@ public class MonitorUrna extends JPanel {
 	}
 	
 	private void monitorBranco() {
+		numeroEleitoral = -1;
+		
 		removeAll();
 		
 		//TODO dry
@@ -113,11 +119,36 @@ public class MonitorUrna extends JPanel {
 	
 	private void monitorCorrige() {
 		removeAll();
+		numeroEleitoral = -2;
 		monitorVotando();
 	}
 	
 	private void monitorConfirma() {
-		//TODO barulinho e fim
+		removeAll();
+
+		//TODO dry
+		Font font = Font.getFont("ARIAL");
+		if(getFont() != null)
+			font = getFont();
+
+		JLabel lblFim = new JLabel("FIM", SwingConstants.CENTER);
+		lblFim.setBounds(0, 70, 575, 200);
+		lblFim.setFont(font.deriveFont((float) 70));
+		add(lblFim);
+	
+		validate();
+		repaint();
+		
+		Timer t = new java.util.Timer();
+		t.schedule(new TimerTask() {
+		    @Override
+		    public void run() {
+		        monitorVotando();
+		        validate();
+		        repaint();
+		        t.cancel();
+		    }
+		}, 10000);
 	}
 	
 	private void showCandidato(int numeroEleitoral) {

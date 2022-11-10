@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.swing.JOptionPane;
 
 import model.Chapa;
+import model.Eleicao;
 
 public class Util {
 	
@@ -58,8 +59,8 @@ public class Util {
     												nomeVice, "res/candidatos/nicolas.jpg");
     		
     		else if(numeroEleitoral == 69)
-    			chapa = new Chapa(numeroEleitoral, nomePresidente, "res/candidatos/pedro.jpg", 
-    												nomeVice, "res/candidatos/manoa.jpg");        	
+    			chapa = new Chapa(numeroEleitoral, nomePresidente, "res/candidatos/manoa.jpg", 
+    												nomeVice, "res/candidatos/pedro.jpg");        	
         	chapas.put(chapa.getNumeroEleitoral(), chapa);
         }
         
@@ -148,4 +149,67 @@ public class Util {
 		
 		return listChapas;
 	}
+	
+	public static Eleicao lerEleicao() {
+		try {
+			return lerArquivoEleicao();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return new Eleicao(lerChapas(), 0, 0);
+	}
+	private static Eleicao lerArquivoEleicao() throws Exception {
+		if(!fileVotos.exists())
+			return new Eleicao(lerChapas(), 0, 0);
+		
+		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(fileVotos))) {
+			String strVotosNulos = bufferedReader.readLine();
+			int votosNulos = Integer.parseInt(strVotosNulos);
+			
+			String strVotosBrancos = bufferedReader.readLine();
+			int votosBrancos = Integer.parseInt(strVotosBrancos);
+			
+			HashMap<Integer, Chapa> chapas = lerChapas();
+			
+			String strNumeroEleitoral;
+			while ((strNumeroEleitoral = bufferedReader.readLine()) != null) {
+				int numeroEleitoral = Integer.parseInt(strNumeroEleitoral);
+				String strVotos = bufferedReader.readLine();
+				int votos = Integer.parseInt(strVotos);
+				
+				chapas.get(numeroEleitoral).setQtdVotos(votos);
+			}
+			
+			return new Eleicao(chapas, votosBrancos, votosNulos);
+		}
+	}
+	
+	public static void atualizarEleicao(Eleicao eleicao) throws Exception {
+		if(!fileVotos.exists())
+			fileVotos.createNewFile();
+		else {
+			fileVotos.delete();
+		}
+			
+		BufferedWriter out = new BufferedWriter(new FileWriter(fileVotos, true));
+		
+		String strEleicao = eleicao.getVotosNulos() + "\n" 
+						+ eleicao.getVotosBrancos() + "\n";
+		
+		ArrayList<Chapa> chapas = HashToArray(eleicao.getChapas());
+		
+		for (Chapa chapa : chapas) {
+			strEleicao += chapa.getNumeroEleitoral() + "\n";
+			strEleicao += chapa.getQtdVotos() + "\n";
+		}
+		
+		out.write(strEleicao);
+		out.close();
+	}
+	
+	public static void finalizarEleicao() {
+		Eleicao eleicao = lerEleicao();
+	}
+
 }

@@ -133,8 +133,8 @@ public class PanelCadastrarChapas extends JPanel {
 												nomeVice, "res/candidatos/nicolas.jpg");
 		
 		else if(numeroEleitoral == 69)
-			chapa = new Chapa(numeroEleitoral, nomePresidente, "res/candidatos/pedro.jpg", 
-												nomeVice, "res/candidatos/manoa.jpg");
+			chapa = new Chapa(numeroEleitoral, nomePresidente, "res/candidatos/manoa.jpg", 
+												nomeVice, "res/candidatos/pedro.jpg");
 		
 		Util.armazenarChapa(chapa);
 		

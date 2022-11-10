@@ -19,6 +19,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import model.Chapa;
+import model.Eleicao;
+import util.Util;
 
 public class Urna extends JPanel {
 
@@ -31,6 +33,10 @@ public class Urna extends JPanel {
 	private BufferedImage background;
 	private String pathBackground = "/urna.png";
 	
+	private Eleicao eleicao;
+	
+	private int currentVoto;
+	
 	public Urna(HashMap<Integer, Chapa> chapas) {
 		try {
 			background = ImageIO.read(getClass().getResource(pathBackground));
@@ -40,6 +46,7 @@ public class Urna extends JPanel {
 		}
 		
 		this.chapas = chapas;
+		this.eleicao = Util.lerEleicao();
 		
 		setLayout(null);
 		setPreferredSize(new Dimension(1029, 600));
@@ -105,7 +112,11 @@ public class Urna extends JPanel {
 		pnlBotoes.add(btnCorrige);
 		
 		JButton btnConfirma = new JButton();
-		btnConfirma.addActionListener((ActionEvent e) -> monitor.atualizarMonitor(getBotaoUrna("CONFIRMA")));
+		btnConfirma.addActionListener((ActionEvent e) -> {
+			monitor.atualizarMonitor(getBotaoUrna("CONFIRMA"));
+			eleicao.computarVoto(monitor.numeroEleitoral);
+			monitor.numeroEleitoral = -2;
+		});
 		configureBotao(btnConfirma);
 		pnlBotoes.add(btnConfirma);
 
