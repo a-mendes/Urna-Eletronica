@@ -18,6 +18,11 @@ public class Util {
 	
 	private static File fileChapas = new File("chapas.txt");
 	private static File fileVotos = new File("votos.txt");
+	private static File fileResultados = new File("resultado.txt");
+	
+	private static final String secret = "eleicao";
+	
+	private static AESEncryptionDecryption cript = new AESEncryptionDecryption();
 	
 	/**
 	 * Retorna as chapas cadastradas ou um hashmap vazio
@@ -164,23 +169,22 @@ public class Util {
 			return new Eleicao(lerChapas(), 0, 0);
 		
 		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(fileVotos))) {
-			String strVotosNulos = bufferedReader.readLine();
-			int votosNulos = Integer.parseInt(strVotosNulos);
+			String strVotos = cript.decrypt(bufferedReader.readLine(), secret);
+
+			String[] votos = strVotos.split("\n");
 			
-			String strVotosBrancos = bufferedReader.readLine();
-			int votosBrancos = Integer.parseInt(strVotosBrancos);
+			int votosNulos = Integer.parseInt(votos[0]);
+			int votosBrancos = Integer.parseInt(votos[1]);
 			
 			HashMap<Integer, Chapa> chapas = lerChapas();
 			
-			String strNumeroEleitoral;
-			while ((strNumeroEleitoral = bufferedReader.readLine()) != null) {
-				int numeroEleitoral = Integer.parseInt(strNumeroEleitoral);
-				String strVotos = bufferedReader.readLine();
-				int votos = Integer.parseInt(strVotos);
+			for (int i = 2; i < votos.length; i++) {
+				int numeroEleitoral = Integer.parseInt(votos[i]);
+				i++;
+				int votosChapa = Integer.parseInt(votos[i]);
 				
-				chapas.get(numeroEleitoral).setQtdVotos(votos);
+				chapas.get(numeroEleitoral).setQtdVotos(votosChapa);
 			}
-			
 			return new Eleicao(chapas, votosBrancos, votosNulos);
 		}
 	}
@@ -204,12 +208,39 @@ public class Util {
 			strEleicao += chapa.getQtdVotos() + "\n";
 		}
 		
-		out.write(strEleicao);
+		out.write(cript.encrypt(strEleicao, secret));
 		out.close();
 	}
 	
 	public static void finalizarEleicao() {
-		Eleicao eleicao = lerEleicao();
+		try {
+			finalizarEleicaoArquivo();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
-
+	
+	private static void finalizarEleicaoArquivo() throws Exception {
+		Eleicao eleicao = lerEleicao();
+		
+		if(!fileResultados.exists())
+			fileResultados.delete();
+		else {
+			fileResultados.createNewFile();
+		}
+		
+		BufferedWriter out = new BufferedWriter(new FileWriter(fileResultados, true));
+		
+		String strResultado = "Votos Nulos: " + eleicao.getVotosNulos() + "\n" 
+						  + "Votos Brancos: " + eleicao.getVotosBrancos() + "\n";
+		
+		ArrayList<Chapa> chapas = HashToArray(eleicao.getChapas());
+		
+		for (Chapa chapa : chapas) {
+			strResultado += "Votos Chapa " + chapa.getNumeroEleitoral() + ": "+ chapa.getQtdVotos() +"\n";
+		}
+		
+		out.write(strResultado);
+		out.close();
+	}
 }

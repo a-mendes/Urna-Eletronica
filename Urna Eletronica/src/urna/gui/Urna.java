@@ -1,5 +1,7 @@
 package urna.gui;
 
+import static javax.swing.JOptionPane.showInputDialog;
+import static javax.swing.JOptionPane.showMessageDialog;
 import static urna.gui.BotoesUrna.getBotaoUrna;
 
 import java.awt.Color;
@@ -35,8 +37,6 @@ public class Urna extends JPanel {
 	
 	private Eleicao eleicao;
 	
-	private int currentVoto;
-	
 	public Urna(HashMap<Integer, Chapa> chapas) {
 		try {
 			background = ImageIO.read(getClass().getResource(pathBackground));
@@ -54,6 +54,7 @@ public class Urna extends JPanel {
 		
 		initMonitor();
 		initPanelBotoes();
+		add(btnFinalizarEleicao());
 	}
 	
 	private void initMonitor() {
@@ -121,6 +122,29 @@ public class Urna extends JPanel {
 		pnlBotoes.add(btnConfirma);
 
 		add(pnlBotoes);
+	}
+	
+	private JButton btnFinalizarEleicao() {
+		JButton btnFinalizar = new JButton();
+		configureBotao(btnFinalizar);
+		btnFinalizar.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+		btnFinalizar.setBounds(663, 172, 300, 80);
+		
+		btnFinalizar.addActionListener((ActionEvent arg0) -> {
+			String senha = showInputDialog(null, "Informe a senha para finalizar a ELEICAO");
+			
+			if("2504".equals(senha)) {
+				Util.finalizarEleicao();
+				showMessageDialog(null, "O resultado foi impresso no arquivo \"resultado.txt\"");
+				System.exit(0);
+			}
+			
+			else
+				showMessageDialog(null, "Senha incorreta");
+
+		});
+		
+		return btnFinalizar;
 	}
 	
 	private void configureBotao(JButton btn) {
