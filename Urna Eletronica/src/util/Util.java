@@ -223,7 +223,7 @@ public class Util {
 	private static void finalizarEleicaoArquivo() throws Exception {
 		Eleicao eleicao = lerEleicao();
 		
-		if(!fileResultados.exists())
+		if(fileResultados.exists())
 			fileResultados.delete();
 		else {
 			fileResultados.createNewFile();
