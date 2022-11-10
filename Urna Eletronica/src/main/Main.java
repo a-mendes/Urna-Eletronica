@@ -36,6 +36,7 @@ public class Main extends JFrame {
 		
 		pack();
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setResizable(false);
 		setLocationRelativeTo(null);
 		setVisible(true);
 	}
