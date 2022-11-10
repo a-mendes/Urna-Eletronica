@@ -170,7 +170,7 @@ public class MonitorUrna extends JPanel {
 		}
 		
 		String infoChapa = "<HTML><BODY>"
-				+ " <b>Número: </b>"+ chapa.getNumeroEleitoral() +"<br/>"
+				+ " <b>Numero: </b>"+ chapa.getNumeroEleitoral() +"<br/>"
 				+ " <b>Presidente: </b> " + chapa.getNomePresidente() + "<br/>"
 				+ " <b>Vice: </b> " + chapa.getNomeVice() + "<br/>"
 			 + "</BODY></HTML>";
